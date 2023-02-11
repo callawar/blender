@@ -1,0 +1,23 @@
+import bpy
+
+# Set the scene settings
+bpy.ops.object.camera_add(location=(0, 0, 20))
+bpy.ops.object.light_add(location=(0, 0, 20))
+
+# Create the base of the skyscraper
+bpy.ops.mesh.primitive_cube_add(location=(0, 0, 0), size=10)
+base = bpy.context.object
+base.name = "Base"
+
+# Extrude the base to create the main body of the skyscraper
+bpy.ops.object.mode_set(mode='EDIT')
+bpy.ops.mesh.extrude_region_move(TRANSFORM_OT_translate={"value":(0, 0, 20)})
+bpy.ops.object.mode_set(mode='OBJECT')
+
+# Add windows to the skyscraper
+for i in range(20):
+    for j in range(10):
+        bpy.ops.mesh.primitive_cube_add(location=(-4.5 + (i * 0.5), -4.5 + (j * 0.5), 10), size=0.3)
+
+# Render the scene
+bpy.ops.render.render(write_still=True)

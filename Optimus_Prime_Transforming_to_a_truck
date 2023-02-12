@@ -1,0 +1,36 @@
+import bpy
+
+# Create the base mesh for Optimus Prime
+bpy.ops.mesh.primitive_cube_add(size=2, location=(0, 0, 0))
+bpy.ops.transform.resize(value=(5, 2, 1))
+
+# Create the base mesh for the truck
+bpy.ops.mesh.primitive_cube_add(size=2, location=(10, 0, 0))
+bpy.ops.transform.resize(value=(10, 4, 2))
+
+# Create an armature to control the transformation
+bpy.ops.object.armature_add(location=(0, 0, 0))
+
+# Create the first bone for the armature
+bpy.ops.object.editmode_toggle()
+bpy.ops.armature.bone_primitive_add(name="Bone1")
+bpy.ops.transform.resize(value=(5, 0.5, 0.5))
+bpy.ops.object.editmode_toggle()
+
+# Parent the base mesh for Optimus Prime to the armature
+bpy.context.view_layer.objects.active = bpy.data.objects["Cube"]
+bpy.ops.object.parent_set(type='BONE', bone="Bone1")
+
+# Parent the base mesh for the truck to the armature
+bpy.context.view_layer.objects.active = bpy.data.objects["Cube.001"]
+bpy.ops.object.parent_set(type='BONE', bone="Bone1")
+
+# Add a keyframe for the start of the transformation
+bpy.ops.anim.keyframe_insert_menu(type='LocRotScale')
+
+# Move the armature forward to trigger the transformation
+bpy.data.objects["Bone1"].location.x += 5
+bpy.ops.anim.keyframe_insert_menu(type='LocRotScale')
+
+# Create the final animation
+bpy.ops.screen.animation_play()
